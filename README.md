@@ -43,5 +43,8 @@ Following the Markov Chain calculation transition matrix is converted into the s
 
 __NOTE: writeMM puts the dimensions of the matrix on the second line. This line confuses MATLAB so make sure to remove it!__
 
-TODO: Evaluate performance of the model
+TODO: 
+* Evaluate performance of the model
+* Improve workflow. i.e. make an interface where you enter current odds and time and the most likely outcome is returned
+ 
 
