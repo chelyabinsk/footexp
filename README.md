@@ -3,7 +3,7 @@
 ### MC Model 1
 
 #### Workflow
-
+Assuming already have data in the *odds.csv* file, run the *chain_gen.r* file in R. It will create a file called *dumb_sparce.mm*
 ##### chain_gen.r 
 Opens odds.csv file and only keep matches that have been going from time 0 to at least 90 without any missing minutes.
 
