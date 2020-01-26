@@ -3,7 +3,9 @@
 ### MC Model 1
 
 #### Workflow
-Assuming already have data in the *odds.csv* file, run the *chain_gen.r* file in R. It will create a file called *dumb_sparce.mm*
+Assuming already have data in the *odds.csv* file, run the *chain_gen.r* file in R. It will create a file called *dumb_sparce.mm*. Open *dumb_chain_test.m* file in MATLAB. 
+Variable *val* stores the initial position of the chain, you will have to modify it accordingly. __Obviously need a develop a better way to do this__. When MATLAB code is ran
+pay attention to two outputs. First output comes from *tab(index,2)* which shows 3 most likely states, and *vals* shows the probabilities of the afore mentioned states.
 ##### chain_gen.r 
 Opens odds.csv file and only keep matches that have been going from time 0 to at least 90 without any missing minutes.
 
