@@ -45,17 +45,26 @@ while(True):
         r = req.get(all_events_uri,headers=header)
     except:
         print("Too many events requests")
-        time.sleep(20)
+        time.sleep(10)
         continue
     
     if(r.status_code == 200):
-        json = r.json()
+        try:
+            json = r.json()
+        except:
+            continue
              
         # Extract live event ids
-        events = json["events"]
+        try:
+            events = json["events"]
+        except:
+            continue
         c = 0
         for entry in events:
-            event = entry["event"]
+            try:
+                event = entry["event"]
+            except:
+                continue
             
             # Sometimes event doesn't have any bet offers
             try:
@@ -93,13 +102,23 @@ while(True):
                  
             # If event is live, grab score, and time
             if(event_state == "STARTED"):
-                live_data = entry["liveData"]
-                scores = live_data["score"]
-                live_clock = live_data["matchClock"]
-                
-                event_home_score = scores["home"]
-                event_away_score = scores["away"]
-                event_time = live_clock["minute"]
+                try:
+                    live_data = entry["liveData"]
+                    scores = live_data["score"]
+                    live_clock = live_data["matchClock"]
+                except:
+                    continue
+                    #scores = ""
+                    #live_clock = ""
+                    
+                try:
+                    event_home_score = scores["home"]
+                    event_away_score = scores["away"]
+                    event_time = live_clock["minute"]
+                except:
+                    event_home_score = ""
+                    event_away_score = ""
+                    event_time = ""            
             else:
                 event_home_score = ""
                 event_away_score = ""
@@ -169,4 +188,4 @@ while(True):
 
     print("Wait 50 seconds. {}".format(current_time))
     time.sleep(50)
-    
+   
