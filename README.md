@@ -12,4 +12,20 @@ event_time and odds columns are combined to create a state
 
 Markov chain is calculated from the transition between states
 
--- TODO: Group states to reduce the number of total states
+Since there are too many states  common states are put into groups to reduce computation time
+
+| Odds Range | Group |
+|:-----------|------:|
+| 0 <= odds < 0.2 | 1 |
+| 0.2 <= odds < 0.4 | 2 |
+| 0.4 <= odds < 0.8 | 3 |
+| 0.8 <= odds < 1.2 | 4 |
+| 1.2 <= odds < 1.5 | 5 |
+| 1.5 <= odds < 2 | 6 |
+| 2 <= odds < 3| 7 |
+| 3 <= odds < 5| 8 |
+| 5 <= odds < 10| 9 |
+| 10 <= odds < 30| 10 |
+| 30 <= odds < 200| 11 |
+| 200 <= odds <= 1000| 12 |
+
