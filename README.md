@@ -1,7 +1,10 @@
 # 888 Sports experiment
 
 ### MC Model 1
-#### chain_gen.r 
+
+#### Workflow
+
+##### chain_gen.r 
 Opens odds.csv file and only keep matches that have been going from time 0 to at least 90 without any missing minutes.
 
 There are 3 columns (outcome_home, outcome_draw, outcome_away) they specify the odds for home win, draw, or a away win.
