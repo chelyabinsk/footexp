@@ -36,3 +36,5 @@ Following the Markov Chain calculation transition matrix is converted into the s
 
 __NOTE: writeMM puts the dimensions of the matrix on the second line. This line confuses MATLAB so make sure to remove it!__
 
+TODO: Evaluate performance of the model
+
