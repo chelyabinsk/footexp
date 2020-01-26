@@ -8,7 +8,7 @@ There are 3 columns (outcome_home, outcome_draw, outcome_away) which specify the
 
 Then the 3 columns are combined into one column.
 
-event_time and odds columns are combined to create a state
+event_time and odds group columns are combined to create a state. E.g. *10_2* means group 2 at minute 10
 
 Markov chain is calculated from the transition between states
 
