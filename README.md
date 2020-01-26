@@ -49,4 +49,6 @@ TODO:
 * Improve workflow. i.e. make an interface where you enter current odds and time and the most likely outcome is returned
 * Check if can sell your odds back
  
+* Consider entirely different approach to predicting outcomes. For example some kind of regression. Or just basic strategies like "if odds been going down for the last 5 steps then they will probably will carry on going down"
+as well as investigate accuracy of the initial odds.
 
