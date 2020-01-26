@@ -29,8 +29,10 @@ Since there are too many states  common states are put into groups to reduce com
 | 30 <= odds < 200| 11 |
 | 200 <= odds <= 1000| 12 |
 
-Markov Chain is calculated from the chain of events using the function *markovchainFit* 
+Markov Chain is calculated from the chain of events using the function *markovchainFit*. Alternatively, can try using Python package PyEMMA to calculate the
+transition matrix from the sample [http://www.emma-project.org/v2.2.7/api/generated/msmtools.estimation.transition_matrix.html].
 
 Following the Markov Chain calculation transition matrix is converted into the sparse matrix and then exported as a *dumb_sparse.mm*
 
 __NOTE: writeMM puts the dimensions of the matrix on the second line. This line confuses MATLAB so make sure to remove it!__
+
