@@ -24,6 +24,7 @@ spy(H);
 % 200 <= odds <= 1000	12
 
 val = '30_5';
+steps = 50;
 
 % Create initial vector
 s = size(H);
@@ -36,7 +37,7 @@ pi = ismember(tab.x,{val})';
 
 plot(pi);
 hold on;
-H_=H^50;  % Evaluate probability 20 steps ahead
+H_=H^steps;  % Evaluate probability 20 steps ahead
 pi_new = pi*H_;
 plot(pi_new);
 
