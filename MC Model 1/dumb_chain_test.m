@@ -23,8 +23,8 @@ spy(H);
 % 30  <= odds < 200	    11
 % 200 <= odds <= 1000	12
 
-val = '30_5';
-steps = 50;
+val = '45_7';
+steps = 30;
 
 % Create initial vector
 s = size(H);
