@@ -4,7 +4,7 @@
 #### chain_gen.r 
 Opens odds.csv file and only keep matches that have been going from time 0 to at least 90 without any missing minutes.
 
-There are 3 columns (outcome_home, outcome_draw, outcome_away) which specify the odds for home win, draw, or a away win.
+There are 3 columns (outcome_home, outcome_draw, outcome_away) they specify the odds for home win, draw, or a away win.
 
 Then the 3 columns are combined into one column.
 
@@ -12,7 +12,7 @@ event_time and odds group columns are combined to create a state. E.g. *10_2* me
 
 Markov chain is calculated from the transition between states
 
-Since there are too many states  common states are put into groups to reduce computation time
+Since there are too many states  common states are put into groups to reduce computational time
 
 | Odds Range | Group |
 |:-----------|------:|
@@ -29,3 +29,8 @@ Since there are too many states  common states are put into groups to reduce com
 | 30 <= odds < 200| 11 |
 | 200 <= odds <= 1000| 12 |
 
+Markov Chain is calculated from the chain of events using the function *markovchainFit* 
+
+Following the Markov Chain calculation transition matrix is converted into the sparse matrix and then exported as a *dumb_sparse.mm*
+
+__NOTE: writeMM puts the dimensions of the matrix on the second line. This line confuses MATLAB so make sure to remove it!__
