@@ -65,12 +65,12 @@ from d2 as t1 inner join
 ")
 
 # Combine three columns into one chain
-d4 <- sqldf("select event_id,event_time,outcome_home as odds from d3")
-d4 <- rbind(d4,sqldf("select event_id,event_time,outcome_away as odds from d3"))
-d4 <- rbind(d4,sqldf("select event_id,event_time,outcome_draw as odds from d3"))
+d4 <- sqldf("select event_id,event_time,outcome_home as odds, 1 as chain_n from d3")
+d4 <- rbind(d4,sqldf("select event_id,event_time,outcome_away as odds, 2 as chain_n from d3"))
+d4 <- rbind(d4,sqldf("select event_id,event_time,outcome_draw as odds, 3 as chain_n from d3"))
 
 # Remove all of the time zero
-d5 <- sqldf("select distinct * from d4 where event_time > 0")
+d5 <- sqldf("select * from d4 where event_time > 0")
 # Remove data no more bets were allowed
 d5 <- na.omit(d5)
 d5[d5$odds == "",] <- NA
@@ -80,23 +80,66 @@ d5 <- na.omit(d5)
 d5$event_time <- as.numeric(d5$event_time)
 
 # Remove duplicate times and enter 0 time with 0 odds
-empty_events <- sqldf("select distinct event_id, 0 as event_time, 0 as odds from d5")
+empty_events <- sqldf("select distinct event_id, 0 as event_time, 0 as odds, 1 as chain_n from d5")
 d6 <- rbind(d5,empty_events)
-d7 <- sqldf("select * from d6 group by event_id, event_time order by event_id, event_time")
+empty_events <- sqldf("select distinct event_id, 0 as event_time, 0 as odds, 2 as chain_n from d5")
+d6 <- rbind(d6,empty_events)
+empty_events <- sqldf("select distinct event_id, 0 as event_time, 0 as odds, 3 as chain_n from d5")
+d6 <- rbind(d6,empty_events)
+
+#1005635292
+
+d7 <- sqldf("select * from d6 group by event_id, event_time, chain_n order by event_id, chain_n, event_time")
 
 # Find number of entries for each match
-ids_count <- sqldf("select event_id, count(event_time) - 1 as num_count from d7 group by event_id")
+ids_count <- sqldf("select event_id, count(event_time) - 1 as num_count from d7 where chain_n = 1 group by event_id")
+ 
+# Find max time for each event
+ids_max_time <- sqldf("select event_id, max(event_time) as max_time from d7 group by event_id")
+ 
+# Only select matches without missing times
+matches_ids <- sqldf("select t1.event_id from ids_count as t1
+ inner join (select event_id, max_time from ids_max_time) as t2 on t1.event_id = t2.event_id
+ where t1.num_count = t2.max_time ")
+ 
+d8_1 <- sqldf("select t1.* from d7 as t1 inner join (select event_id from matches_ids) as t2
+              on t1.event_id = t2.event_id")
+
+# Find number of entries for each match
+ids_count <- sqldf("select event_id, count(event_time) - 1 as num_count from d7 where chain_n = 2 group by event_id")
 
 # Find max time for each event
 ids_max_time <- sqldf("select event_id, max(event_time) as max_time from d7 group by event_id")
 
 # Only select matches without missing times
 matches_ids <- sqldf("select t1.event_id from ids_count as t1
-inner join (select event_id, max_time from ids_max_time) as t2 on t1.event_id = t2.event_id
-where t1.num_count = t2.max_time ")
+ inner join (select event_id, max_time from ids_max_time) as t2 on t1.event_id = t2.event_id
+ where t1.num_count = t2.max_time ")
 
-d8 <- sqldf("select t1.* from d7 as t1 inner join (select event_id from matches_ids) as t2 
-             on t1.event_id = t2.event_id")
+d8_2 <- sqldf("select t1.* from d7 as t1 inner join (select event_id from matches_ids) as t2
+              on t1.event_id = t2.event_id")
+
+# Find number of entries for each match
+ids_count <- sqldf("select event_id, count(event_time) - 1 as num_count from d7 where chain_n = 3 group by event_id")
+
+# Find max time for each event
+ids_max_time <- sqldf("select event_id, max(event_time) as max_time from d7 group by event_id")
+
+# Only select matches without missing times
+matches_ids <- sqldf("select t1.event_id from ids_count as t1
+ inner join (select event_id, max_time from ids_max_time) as t2 on t1.event_id = t2.event_id
+ where t1.num_count = t2.max_time ")
+
+d8_3 <- sqldf("select t1.* from d7 as t1 inner join (select event_id from matches_ids) as t2
+              on t1.event_id = t2.event_id")
+
+d8 <- rbind(d8_1,d8_2,d8_3)
+rm(d8_1,d8_2,d8_3)
+
+#empty_events <- sqldf("select distinct event_id, 0 as event_time, 0 as odds, 2 as chain_n from d5")
+#d6 <- rbind(d6,empty_events)
+#empty_events <- sqldf("select distinct event_id, 0 as event_time, 0 as odds, 3 as chain_n from d5")
+#d6 <- rbind(d6,empty_events)
 
 
 # Replace text odds with numerical values
@@ -136,6 +179,73 @@ ifelse(d9$odds < 200, 11,
 #table(d9$odds_group)
 
 d9$state <- paste(d9$event_time,"_",d9$odds_group,sep = "")
+
+# Add event number column
+ids <- sqldf("select distinct event_id from d9")
+ids$count <- seq(1:length(ids$event_id))
+d9 <- sqldf("select t1.*,t2.count from d9 as t1 
+             inner join(
+             select event_id, count from ids
+             ) as t2
+             on t1.event_id = t2.event_id
+             order by 
+             event_id,
+             chain_n,
+             event_time
+             ")
+
+# Create winning chain flag
+d9_ <- d9
+d9_$tmp_name <- paste(d9$event_id,"_",d9$chain_n,sep = "")
+d9_$event_time <- as.numeric(d9_$event_time)
+win_row <- sqldf("
+                select distinct t1.event_id, chain_n as win_chain from 
+                (
+                select t1.event_id, 
+                t1.event_time,
+                t1.chain_n,
+                min(t2.odds) as odds,
+                1 as win_chain 
+                
+                from d9 as t1 
+                inner join
+                (
+                 select event_id, 
+                 odds, 
+                 max(event_time) as event_time, 
+                 chain_n 
+                 
+                 from d9_ 
+                 
+                 group by
+                 tmp_name
+                ) as t2
+                on t1.event_id = t2.event_id and 
+                   t1.chain_n = t2.chain_n and
+                   t1.event_time = t2.event_time
+                group by 
+                t1.event_id
+                ) as t1
+                 ")
+
+d9 <- sqldf("select distinct t1.*,
+             case when t1.event_id = t2.event_id and t1.chain_n = t2.win_chain then 1
+             else 0
+             end as win_chain
+             from d9 as t1
+             inner join (
+             select * from win_row
+             ) as t2
+             on t1.event_id = t2.event_id
+             order by event_id, chain_n, event_time")
+rm(d9_)
+
+# use 75% to fit the model
+# and 25% to test the model
+fit_model <- sqldf("select * from d9 where count < 300")
+test_model <- sqldf("select * from d9 where count >= 300")
+
+
 mcFit <- markovchainFit(data=d9$state)
 # Create a sparse transition matrix
 sparse_trans <- as(mcFit$estimate, "sparseMatrix")
@@ -155,3 +265,4 @@ which(names(mcFit$estimate)=="12_8") # 36 82_12 (0.26), 82_9 (0.132)
 which(names(mcFit$estimate)=="12_7") # 35 82_12 (0.21), 82_8 (0.167)
 which(names(mcFit$estimate)=="12_3") # 31 82_1 (0.2189), 82_12 (0.22)
 names(mcFit$estimate)[912]
+

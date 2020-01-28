@@ -24,7 +24,7 @@ spy(H);
 % 200 <= odds <= 1000	12
 
 val = '45_7';
-steps = 30;
+steps = 40;
 
 % Create initial vector
 s = size(H);
@@ -37,7 +37,7 @@ pi = ismember(tab.x,{val})';
 
 plot(pi);
 hold on;
-H_=H^steps;  % Evaluate probability 20 steps ahead
+H_=H^steps;  % Evaluate probability steps ahead
 pi_new = pi*H_;
 plot(pi_new);
 
@@ -53,3 +53,11 @@ vals = desc_vals(1:3);
 % Look up vals
 tab(index,2)
 vals
+
+
+% Check accuracy of the predictions 
+% https://www.888sport.com/football/#/filter/football/1006102135
+% t=15
+% H=2.1 p=0.21 (same group 7), p=0.12 (increase higher 8) at 45
+% D= same
+% A= 1.1 p=0.1378, p=0.11 incrase
