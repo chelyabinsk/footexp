@@ -10,7 +10,7 @@ require(data.table)
 setwd("H:\\betting\\footexp\\MC Model 1")
 # Read data
 d <- read.csv("../odds.csv",header=T,)
-d <- read.csv("../BP Model 1/odds.csv",header=T,)
+#d <- read.csv("../BP Model 1/odds.csv",header=T,)
 
 # Find last minute for each game
 # Sometimes goals are disallowed grrrr

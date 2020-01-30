@@ -4,17 +4,12 @@ setwd("H:\\betting\\footexp\\BP Model 1")
 model<-read.csv("bp_model.csv")
 model$t <- 1:length(model[,1])
   
-
-#1006110231
-#1006110280
-#1006107245
-
-#[1006042012, 1006110426, 1006110280, 1006107511, 1006105888, 1006105981]
+# [1006110426, 1006105888]
 
 dat <- read.csv("odds.csv")
 
 dd <- sqldf("select distinct event_time, outcome_home, outcome_draw, outcome_away from dat
-            where event_id = 1006042012")
+            where event_id = 1006105888 and event_time < 90")
 dd$outcome_draw <- mapvalues(dd$outcome_draw, from = c("Evens"), to = c(1))
 dd$outcome_home <- mapvalues(dd$outcome_home, from = c("Evens"), to = c(1))
 dd$outcome_away <- mapvalues(dd$outcome_away, from = c("Evens"), to = c(1))
@@ -28,6 +23,10 @@ ggplot() +
   geom_line(data=model,aes(t,conf_l)) +
   geom_line(data=model,aes(t,l_75)) +
   geom_line(data=model,aes(t,l_25)) +
+  
+  geom_line(data=model,aes(t,uu)) +
+  geom_line(data=model,aes(t,ll)) +
+  
   
   geom_point(data=dd,aes(event_time,outcome_draw),col=4) +
   geom_point(data=dd,aes(event_time,outcome_home),col=6) +

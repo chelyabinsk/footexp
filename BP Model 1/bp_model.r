@@ -123,6 +123,9 @@ l_75 <- b$stats[2,]
 # 25%
 l_25 <- b$stats[4,]
 
+uu <- b$stats[1,]
+ll <- b$stats[5,]
+
 lines(conf_u,col="red")
 lines(conf_l,col="red")
 
@@ -130,4 +133,4 @@ lines(l_75,col="blue")
 lines(l_25,col="blue")
 
 # Export the model
-write.csv(data.frame(conf_u,conf_l,l_75,l_25),"bp_model.csv",row.names = F)
+write.csv(data.frame(conf_u,conf_l,l_75,l_25,uu,ll),"bp_model.csv",row.names = F)
