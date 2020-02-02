@@ -100,11 +100,11 @@ for(i in 1:length(dd_3[,1]) ){
     is_valid = F
     #print(c(i,dd_3[i,2]))
   }
-   if(i < length(dd_3[,1])){
-     if(dd_3[i,3] - dd_3[i+1,3] > 0.2 ){
-        is_valid = F
-      }
-   }
+  if(i < length(dd_3[,1])){
+    if(dd_3[i,3] - dd_3[i+1,3] > 0.2 ){
+      is_valid = F
+    }
+  }
   # if(i < length(dd_1[,1])){
   #   if(dd_1[i,3] - dd_1[i+1,3] > 0.2 ){
   #     is_valid = F
