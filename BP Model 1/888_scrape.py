@@ -35,7 +35,7 @@ header = {
 "Connection": "keep-alive"
 }
 
-wait_time = 55
+wait_time = 27
 outputfile = "odds.csv"
 
 

@@ -7,9 +7,9 @@ require(data.table)
 #update.packages("Rcpp")
 
 # set working directory
-setwd("H:\\betting\\footexp\\MC Model 1")
+setwd("/home/pirate/Documents/GITHUB/footexp")
 # Read data
-d <- read.csv("../odds.csv",header=T,)
+d <- read.csv("odds.csv",header=T,)
 #d <- read.csv("../BP Model 1/odds.csv",header=T,)
 
 # Find last minute for each game
@@ -227,15 +227,12 @@ win_row <- sqldf("
                 ) as t1
                  ")
 
-clean_data <- sqldf("select distinct t1.*,
-             case when t1.event_id = t2.event_id and t1.chain_n = t2.win_chain then 1
-             else 0
-             end as win_chain
+clean_data <- sqldf("select distinct t1.*,t2.win_chain
              from d9 as t1
              inner join (
              select * from win_row
              ) as t2
              on t1.event_id = t2.event_id
              order by event_id, chain_n, event_time")
-#rm(d9_,d9,d2,d3,d4,d5,d6,d7,d8,empty_events,ids,ids_count,ids_max_time,matches_g_90,matches_ids,win_row,capt_per_game)
+rm(d9_,d9,d2,d3,d4,d5,d6,d7,d8,empty_events,ids,ids_count,ids_max_time,matches_g_90,matches_ids,win_row,capt_per_game)
 

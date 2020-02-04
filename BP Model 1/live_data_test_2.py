@@ -19,8 +19,8 @@ now = datetime.now() # current date and time
 FMT = "%Y-%m-%dT%H:%M:%SZ"
 
 
-#path = "/home/pirate/Documents/GITHUB/footexp/BP Model 1"
-path = "H:/betting/footexp/BP Model 1"
+path = "/home/pirate/Documents/GITHUB/footexp/BP Model 1"
+#path = "H:/betting/footexp/BP Model 1"
 
 while(True):
     now = datetime.now() # current date and time
@@ -122,11 +122,12 @@ while(True):
                     #print(row_time,draw_odds[i],0)
                 # Check that draw odds didn't jump too high up
                 if(i < tmp_dat.event_id.count()-1):
-                    if(draw_odds[i+1] - draw_odds[i] > 0.1):
+                    if(draw_odds[i+1] - draw_odds[i] > 0.2):
                         is_valid = False
                         #print(draw_odds[i])
+		if(
         # Check if suitable for bet
-        if(is_valid == True and row_time > 45 and draw_odds[i] <= 1.5 and draw_odds[i] > 1):
+        if(is_valid == True and row_time > 45 and draw_odds[i] <= 2 and draw_odds[i] > 1):
             with open("results.csv","a") as f:
                 f.write("{},{},{},{}\n".format(uid,row_time,draw_odds[i],True in tmp_dat.outcome_unexpectedOddsTrend.values))
                 print(uid,row_time,draw_odds[i])
